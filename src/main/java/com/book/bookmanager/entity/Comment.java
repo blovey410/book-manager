@@ -3,6 +3,7 @@ package com.book.bookmanager.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,16 +17,22 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Comment extends BaseEntity implements Serializable {
-    
-    
-            /**
-            *评论内容
-            */
-        private String content;
-    
-            /**
-            *评论时间
-            */
-        private LocalDateTime createTime;
-    
+
+
+    /**
+     * 评论内容
+     */
+    private String content;
+
+    /**
+     * 评论人
+     */
+    private Long userId;
+
+    /**
+     * 评论时间
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createTime;
+
 }

@@ -2,7 +2,6 @@ package com.book.bookmanager.exception;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -13,6 +12,10 @@ public class BookException extends RuntimeException {
 
     private Integer code;
 
+    public BookException() {
+        super();
+    }
+
     public BookException(String message) {
         super(message);
     }
@@ -21,8 +24,4 @@ public class BookException extends RuntimeException {
         super(message);
         this.code = code;
     }
-
-    //public BookException(ResultEnum resultEnum) {
-    //    this(resultEnum.getCode(), resultEnum.getMsg());
-    //}
 }

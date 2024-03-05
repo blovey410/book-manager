@@ -2,7 +2,7 @@ package com.book.bookmanager.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.book.bookmanager.entity.BaseEntity;
-import com.book.bookmanager.entity.Result;
+import com.book.bookmanager.util.Result;
 import com.book.bookmanager.exception.BookException;
 import com.book.bookmanager.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +23,11 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
 
     /* 方法注解 */
     @PostMapping("/save")
-    public T save(@RequestBody T entity) {
+    public Result save(@RequestBody T entity) {
         saveBefore(entity);
         if (!service.save(entity)) throw new BookException("保存失败");
         saveAfter(entity);
-        return entity;
+        return Result.success(entity);
     }
 
     /**
@@ -60,11 +60,13 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
     }
 
     @PostMapping("/updateById")
-    public T updateById(@RequestBody T entity) {
+    public Result updateById(@RequestBody T entity) {
         updateBefore(entity);
-        if (!service.updateById(entity)) throw new BookException("修改失败");
+        if (!service.updateById(entity)) {
+            throw new BookException();
+        }
         updateAfter(entity);
-        return entity;
+        return Result.success(entity);
     }
 
     /**
@@ -86,8 +88,8 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
     }
 
     @GetMapping("/page")
-    public Page<T> page(Page<T> page) {
-        return service.page(page);
+    public Result page(Page<T> page) {
+        return Result.success(service.page(page));
     }
 
     @GetMapping("/getOne")

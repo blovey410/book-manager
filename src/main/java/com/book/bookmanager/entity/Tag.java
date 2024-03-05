@@ -15,11 +15,11 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Tag extends BaseEntity implements Serializable {
-    
-    
-            /**
-            *分类名称
-            */
-        private String name;
-    
+
+
+    /**
+     * 分类名称
+     */
+    private String name;
+
 }

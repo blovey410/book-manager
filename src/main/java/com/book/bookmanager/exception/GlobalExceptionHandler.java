@@ -1,6 +1,6 @@
 package com.book.bookmanager.exception;
 
-import com.book.bookmanager.entity.Result;
+import com.book.bookmanager.util.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
