@@ -20,13 +20,17 @@ public class BookServiceImpl extends BaseServiceImpl<Book> implements BookServic
     private String uploadPath;
 
     @Override
+
     public List<Book> getByTagId(Integer tagId) {
-        return this.lambdaQuery().eq(Book::getTagId, tagId).list();
+        return this.lambdaQuery()
+                .eq(Book::getTagId, tagId)
+                .orderByAsc(Book::getClickNum)
+                .last("limit 5").list();
     }
 
     @Override
     public List<Book> hot() {
-        return this.lambdaQuery().orderByDesc(Book::getClickNum).last("limit 10").list();
+        return this.lambdaQuery().orderByDesc(Book::getClickNum).last("limit 6").list();
     }
 
     @Override
@@ -36,7 +40,7 @@ public class BookServiceImpl extends BaseServiceImpl<Book> implements BookServic
 
     @Override
     public Result upload(MultipartFile file) {
-        if (file!=null && !file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             try {
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) {

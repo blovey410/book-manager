@@ -17,8 +17,20 @@ public enum BookStatus {
      * 借出
      */
     RETURNED(2, "已归还"),
+
+    /**
+     * 逾期归还
+     */
+    LATE_RETURN(3, "逾期归还")
     ;
 
     private int code;
     private String desc;
+
+    public static String getDesc(int code){
+        for (BookStatus value : BookStatus.values()) {
+            if (value.code == code) return value.desc;
+        }
+        return null;
+    }
 }

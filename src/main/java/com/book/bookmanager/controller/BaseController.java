@@ -50,8 +50,10 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
 
 
     @DeleteMapping("/delete")
-    public void delete(T entity) {
-        if (!service.removeById(entity)) throw new BookException("删除失败");
+    public Result delete(T entity) {
+        boolean remove = service.removeById(entity);
+        if (!remove) throw new BookException("删除失败");
+        return Result.success(remove);
     }
 
     @DeleteMapping("/batchDelete")

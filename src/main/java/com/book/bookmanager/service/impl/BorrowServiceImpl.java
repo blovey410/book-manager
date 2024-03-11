@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,21 +63,26 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
     @Override
     public Book returnBook(Borrow borrow) {
         Book book = bookMapper.selectById(borrow.getBookId());
-        // 查询当前用户是否归还过这本书
+        // 查询当前用户是否借阅过这本书
         Borrow one = this.lambdaQuery()
                 .eq(Borrow::getUserId, borrow.getUserId())
                 .eq(Borrow::getBookId, borrow.getBookId())
-                .eq(Borrow::getStatus, BookStatus.RETURNED.getCode())
+                .eq(Borrow::getStatus, BookStatus.NOT_RETURNED.getCode())
                 .one();
-        if (one != null) {
-            this.updateById(one);
-            return book;
-        }
+        if (one == null) throw new BookException("当前用户没有借阅过这本书！");
+        // 计算是否逾期
+        LocalDateTime now = LocalDateTime.now();
+        long between = ChronoUnit.DAYS.between(now, one.getCreateTime());
         borrow.setType(String.valueOf(BookType.RETURN.getCode()));
         borrow.setStatus(BookStatus.RETURNED.getCode());
-        borrow.setCreateTime(LocalDateTime.now());
+        borrow.setCreateTime(now);
+        if (between > 30) {
+            borrow.setStatus(BookStatus.LATE_RETURN.getCode());
+        }
         boolean save = this.save(borrow);
         if (save) {
+            one.setStatus(BookStatus.RETURNED.getCode());
+            this.updateById(one);
             book.setNum(book.getNum() + 1);
             bookMapper.updateById(book);
         }
@@ -92,10 +98,13 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
         borrowPage.getRecords().forEach(borrow -> {
             BorrowDto borrowDto = new BorrowDto();
             Book book = bookMapper.selectById(borrow.getBookId());
-            borrowDto.setName(book.getName());
             User user = userMapper.selectById(borrow.getUserId());
-            borrowDto.setUser(user.getUsername());
+            BeanUtils.copyProperties(book, borrowDto);
             BeanUtils.copyProperties(borrow, borrowDto);
+            borrowDto.setUser(user.getUsername());
+            borrowDto.setUserId(user.getId());
+            borrowDto.setBookId(book.getId());
+            borrowDto.setStatus(BookStatus.getDesc(borrow.getStatus()));
             borrowDtos.add(borrowDto);
         });
         Page<BorrowDto> dtoPage = new Page<>();

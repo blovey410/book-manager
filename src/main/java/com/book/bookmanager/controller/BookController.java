@@ -1,9 +1,11 @@
 package com.book.bookmanager.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.book.bookmanager.entity.Book;
 import com.book.bookmanager.service.BookService;
 import com.book.bookmanager.util.Result;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +19,13 @@ public class BookController extends BaseController<BookService, Book> {
 
     @Resource
     private BookService bookService;
+
+    @GetMapping("findPage")
+    public Result page(Page<Book> page, String search) {
+        return Result.success(service.lambdaQuery()
+                .like(StringUtils.hasLength(search), Book::getName, search)
+                .page(page));
+    }
 
     @GetMapping("getByTagId")
     public Result getByTagId(@RequestParam(value = "tagId", required = false) Integer tagId) {
