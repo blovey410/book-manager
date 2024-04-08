@@ -1,7 +1,6 @@
 package com.book.bookmanager.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -51,5 +50,10 @@ public class Borrow extends BaseEntity implements Serializable {
      * 图书状态
      */
     private Integer status;
+
+    /**
+     * 剩余天数
+     */
+    private Long disparity;
 
 }

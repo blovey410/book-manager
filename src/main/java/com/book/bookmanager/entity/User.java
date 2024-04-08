@@ -33,7 +33,7 @@ public class User extends BaseEntity implements Serializable {
 
     private String email;
 
-    private String status;
+    private Integer status;
 
     private Integer role;
 

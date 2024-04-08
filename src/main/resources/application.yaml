@@ -5,8 +5,10 @@ spring:
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 mybatis-plus:
-    mapper-locations: classpath:mapper/*.xml
-    type-aliases-package: com.book.bookmanager.entity
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.book.bookmanager.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 file:
   upload:
     path: D:\\book-v\\uploads\\

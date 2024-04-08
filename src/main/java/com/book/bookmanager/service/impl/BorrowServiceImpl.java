@@ -33,6 +33,10 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
 
     @Override
     public Book borrow(Borrow borrow) {
+        User user = userMapper.selectById(borrow.getUserId());
+        if (user.getStatus() == 0) {
+            throw new BookException("当前用户已经被禁用！");
+        }
         Book book = bookMapper.selectById(borrow.getBookId());
         // 查询当前用户是否借阅过这本书
         Borrow one = this.lambdaQuery()
@@ -93,9 +97,10 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
     public Page<BorrowDto> getListByUser(Page<Borrow> page, String userId, int type) {
         Page<Borrow> borrowPage = this.lambdaQuery()
                 .eq(StringUtils.hasLength(userId), Borrow::getUserId, userId)
+                .ne(type != 2, Borrow::getStatus, BookStatus.RETURNED.getCode())
                 .eq(Borrow::getType, type).page(page);
         List<BorrowDto> borrowDtos = new ArrayList<>();
-        borrowPage.getRecords().forEach(borrow -> {
+        for (Borrow borrow : borrowPage.getRecords()) {
             BorrowDto borrowDto = new BorrowDto();
             Book book = bookMapper.selectById(borrow.getBookId());
             User user = userMapper.selectById(borrow.getUserId());
@@ -105,8 +110,7 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
             borrowDto.setUserId(user.getId());
             borrowDto.setBookId(book.getId());
             borrowDto.setStatus(BookStatus.getDesc(borrow.getStatus()));
-            borrowDtos.add(borrowDto);
-        });
+        }
         Page<BorrowDto> dtoPage = new Page<>();
         BeanUtils.copyProperties(borrowPage, dtoPage);
         dtoPage.setRecords(borrowDtos);

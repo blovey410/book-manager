@@ -21,7 +21,7 @@ public enum BookStatus {
     /**
      * 逾期归还
      */
-    LATE_RETURN(3, "逾期归还")
+    LATE_RETURN(3, "逾期未还")
     ;
 
     private int code;
