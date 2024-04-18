@@ -97,7 +97,7 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
     public Page<BorrowDto> getListByUser(Page<Borrow> page, String userId, int type) {
         Page<Borrow> borrowPage = this.lambdaQuery()
                 .eq(StringUtils.hasLength(userId), Borrow::getUserId, userId)
-                .ne(type != 2, Borrow::getStatus, BookStatus.RETURNED.getCode())
+                .ne(type != BookStatus.RETURNED.getCode(), Borrow::getStatus, BookStatus.RETURNED.getCode())
                 .eq(Borrow::getType, type).page(page);
         List<BorrowDto> borrowDtos = new ArrayList<>();
         for (Borrow borrow : borrowPage.getRecords()) {
@@ -110,6 +110,7 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
             borrowDto.setUserId(user.getId());
             borrowDto.setBookId(book.getId());
             borrowDto.setStatus(BookStatus.getDesc(borrow.getStatus()));
+            borrowDtos.add(borrowDto);
         }
         Page<BorrowDto> dtoPage = new Page<>();
         BeanUtils.copyProperties(borrowPage, dtoPage);
