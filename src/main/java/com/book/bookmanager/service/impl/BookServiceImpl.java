@@ -16,8 +16,8 @@ import java.util.List;
 @Service
 public class BookServiceImpl extends BaseServiceImpl<Book> implements BookService {
 
-    @Value("${file.upload.path}")
-    private String uploadPath;
+        @Value("${file.upload.path}")
+        private String uploadPath;
 
     @Override
 
