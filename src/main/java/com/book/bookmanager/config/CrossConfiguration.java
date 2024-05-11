@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * 跨域配置
+ * 跨域配置和文件上传路径映射
  */
 @Configuration
 public class CrossConfiguration implements WebMvcConfigurer {

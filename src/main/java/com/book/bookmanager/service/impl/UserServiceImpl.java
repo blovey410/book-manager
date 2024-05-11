@@ -21,6 +21,12 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     @Resource
     private BorrowService borrowService;
 
+    /**
+     * 登录
+     *
+     * @param user 用户
+     * @return 用户
+     */
     @Override
     public User login(User user) {
         User one = this.lambdaQuery().eq(User::getUsername, user.getUsername())

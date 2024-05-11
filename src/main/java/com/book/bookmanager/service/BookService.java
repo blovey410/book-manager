@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface BookService extends BaseService<Book> {
 
-    List<Book> getByTagId(Integer tagId);
+    List<Book> getByTagId(Integer tagId, boolean more);
 
     List<Book> hot();
 

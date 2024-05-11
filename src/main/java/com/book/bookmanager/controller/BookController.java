@@ -28,8 +28,8 @@ public class BookController extends BaseController<BookService, Book> {
     }
 
     @GetMapping("getByTagId")
-    public Result getByTagId(@RequestParam(value = "tagId", required = false) Integer tagId) {
-        return Result.success(bookService.getByTagId(tagId));
+    public Result getByTagId(@RequestParam(value = "tagId", required = false) Integer tagId, @RequestParam(required = false, defaultValue = "true")boolean more) {
+        return Result.success(bookService.getByTagId(tagId, more));
     }
 
     @GetMapping("hot")

@@ -21,11 +21,11 @@ public class BookServiceImpl extends BaseServiceImpl<Book> implements BookServic
 
     @Override
 
-    public List<Book> getByTagId(Integer tagId) {
+    public List<Book> getByTagId(Integer tagId, boolean more) {
         return this.lambdaQuery()
                 .eq(Book::getTagId, tagId)
                 .orderByAsc(Book::getClickNum)
-                .last("limit 5").list();
+                .last(more, "limit 5").list();
     }
 
     @Override
@@ -38,6 +38,11 @@ public class BookServiceImpl extends BaseServiceImpl<Book> implements BookServic
         return this.lambdaQuery().like(Book::getName, search).list();
     }
 
+    /**
+     * 文件上传
+     * @param file
+     * @return
+     */
     @Override
     public Result upload(MultipartFile file) {
         if (file != null && !file.isEmpty()) {

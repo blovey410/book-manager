@@ -11,7 +11,7 @@
  Target Server Version : 80027 (8.0.27)
  File Encoding         : 65001
 
- Date: 08/04/2024 11:29:46
+ Date: 29/04/2024 10:42:58
 */
 
 SET NAMES utf8mb4;
@@ -95,11 +95,10 @@ INSERT INTO `borrow` VALUES (4, 1, 1, '1', 3, '2024-03-08 20:54:45', 2, NULL);
 INSERT INTO `borrow` VALUES (5, 1, 1, '2', 3, '2024-03-08 21:06:13', 2, NULL);
 INSERT INTO `borrow` VALUES (6, 2, 1, '1', 3, '2024-03-09 11:44:30', 2, NULL);
 INSERT INTO `borrow` VALUES (7, 4, 1, '1', 3, '2024-03-09 11:45:00', 2, NULL);
-INSERT INTO `borrow` VALUES (8, 4, NULL, '2', 3, '2024-03-09 11:52:58', 2, NULL);
+INSERT INTO `borrow` VALUES (8, 4, 1, '2', 3, '2024-03-09 11:52:58', 2, NULL);
 INSERT INTO `borrow` VALUES (9, 5, 1, '1', 3, '2024-03-09 11:53:34', 2, NULL);
-INSERT INTO `borrow` VALUES (10, 5, NULL, '2', 3, '2024-03-09 11:53:39', 2, NULL);
-INSERT INTO `borrow` VALUES (11, 2, 1, '2', 3, '2024-03-09 11:54:10', 2, NULL);
-INSERT INTO `borrow` VALUES (12, 9, 1, '1', 3, '2024-02-09 11:55:07', 3, -19);
+INSERT INTO `borrow` VALUES (10, 5, 1, '2', 3, '2024-03-09 11:53:39', 2, NULL);
+INSERT INTO `borrow` VALUES (12, 9, 1, '1', 3, '2024-02-09 11:55:07', 3, -38);
 
 -- ----------------------------
 -- Table structure for comment
@@ -175,7 +174,7 @@ CREATE TABLE `user`  (
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES (1, 'admin', '123456', '男', '123456789', '1244436021@qq.com', NULL, 1, 1);
-INSERT INTO `user` VALUES (3, 'user1', '123', '男', '18325693126', '15612165@163.com', NULL, 1, 2);
+INSERT INTO `user` VALUES (3, 'user1', '123', '男', '18325693126', '15612165@163.com', NULL, 0, 2);
 INSERT INTO `user` VALUES (6, 'user3', '123', NULL, NULL, NULL, '2024-03-13 09:42:53', 1, 2);
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -31,6 +31,11 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
     @Resource
     private UserMapper userMapper;
 
+    /**
+     *  图书借阅
+     * @param borrow
+     * @return
+     */
     @Override
     public Book borrow(Borrow borrow) {
         User user = userMapper.selectById(borrow.getUserId());
@@ -64,6 +69,9 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
         return book;
     }
 
+    /**
+     *  图书归还
+     */
     @Override
     public Book returnBook(Borrow borrow) {
         Book book = bookMapper.selectById(borrow.getBookId());
@@ -93,6 +101,13 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
         return book;
     }
 
+    /**
+     *  查询用户借阅信息
+     * @param page 分页对象
+     * @param userId 用户id
+     * @param type 归还或借阅
+     * @return 分页对象
+     */
     @Override
     public Page<BorrowDto> getListByUser(Page<Borrow> page, String userId, int type) {
         Page<Borrow> borrowPage = this.lambdaQuery()
