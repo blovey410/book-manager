@@ -30,9 +30,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     @Override
     public User login(User user) {
         User one = this.lambdaQuery().eq(User::getUsername, user.getUsername())
-                .eq(User::getPassword, user.getPassword())
                 .one();
-        if (ObjectUtils.isEmpty(one)) throw new BookException("用户名或密码错误");
+        if (ObjectUtils.isEmpty(one)) throw new BookException("用户不存在");
+        if (!one.getPassword().equals(user.getPassword())) throw new BookException("密码错误");
         // 获取当前用户所有未归还的书籍
         List<Borrow> list = borrowService.lambdaQuery()
                 .eq(Borrow::getUserId, one.getId())

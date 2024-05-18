@@ -53,7 +53,6 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
             this.updateById(one);
             return book;
         }
-
         // 判断当前图书的数量是否大于0
         if (book.getNum() <= 0) {
             throw new BookException("当前图书已经被借完了！");
