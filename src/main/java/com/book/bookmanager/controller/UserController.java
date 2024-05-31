@@ -5,6 +5,7 @@ import com.book.bookmanager.entity.User;
 import com.book.bookmanager.exception.BookException;
 import com.book.bookmanager.service.UserService;
 import com.book.bookmanager.util.Result;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,8 +28,9 @@ public class UserController extends BaseController<UserService, User> {
     @Override
     public void saveBefore(User entity) {
         User user = userService.lambdaQuery()
-                .eq(User::getUsername, entity.getUsername()).one();
-        if (user != null) throw new BookException("该用户已经添加注册过了");
+                .eq(StringUtils.hasLength(entity.getUsername()),User::getUsername, entity.getUsername())
+                .eq(StringUtils.hasLength(entity.getTelephone()),User::getTelephone, entity.getTelephone()).one();
+        if (user != null) throw new BookException("该用户或手机号已被使用");
         entity.setRegTime(LocalDateTime.now());
     }
 

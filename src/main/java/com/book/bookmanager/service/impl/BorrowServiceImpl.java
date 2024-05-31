@@ -38,11 +38,16 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
      */
     @Override
     public Book borrow(Borrow borrow) {
+        // 根据用户id查询用户是否被禁用
         User user = userMapper.selectById(borrow.getUserId());
         if (user.getStatus() == 0) {
             throw new BookException("当前用户已经被禁用！");
         }
         Book book = bookMapper.selectById(borrow.getBookId());
+        // 判断当前图书的数量是否大于0
+        if (book.getNum() <= 0) {
+            throw new BookException("当前图书已经被借完了！");
+        }
         // 查询当前用户是否借阅过这本书
         Borrow one = this.lambdaQuery()
                 .eq(Borrow::getUserId, borrow.getUserId())
@@ -50,13 +55,10 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
                 .eq(Borrow::getStatus, BookStatus.NOT_RETURNED.getCode())
                 .one();
         if (one != null) {
-            this.updateById(one);
+            this.updateById(one); // 更新借阅表信息
             return book;
         }
-        // 判断当前图书的数量是否大于0
-        if (book.getNum() <= 0) {
-            throw new BookException("当前图书已经被借完了！");
-        }
+        // 设置借阅状态，借阅时间，并进行库存减一
         borrow.setType(String.valueOf(BookType.BORROW.getCode()));
         borrow.setStatus(BookStatus.NOT_RETURNED.getCode());
         borrow.setCreateTime(LocalDateTime.now());
