@@ -48,6 +48,10 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
         if (book.getNum() <= 0) {
             throw new BookException("当前图书已经被借完了！");
         }
+        // 判断借阅数量是否大于库存数量
+        if (borrow.getNum() > book.getNum()) {
+            throw new BookException("借阅数量大于库存数量！");
+        }
         // 查询当前用户是否借阅过这本书
         Borrow one = this.lambdaQuery()
                 .eq(Borrow::getUserId, borrow.getUserId())
@@ -64,7 +68,7 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
         borrow.setCreateTime(LocalDateTime.now());
         boolean save = this.save(borrow);
         if (save) {
-            book.setNum(book.getNum() - 1);
+            book.setNum(book.getNum() - borrow.getNum());
             bookMapper.updateById(book);
         }
         return book;
@@ -83,6 +87,7 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
                 .eq(Borrow::getStatus, BookStatus.NOT_RETURNED.getCode())
                 .one();
         if (one == null) throw new BookException("当前用户没有借阅过这本书！");
+        if (one.getNum()<borrow.getNum()) throw new BookException("归还数量大于借阅数量！");
         // 计算是否逾期
         LocalDateTime now = LocalDateTime.now();
         long between = ChronoUnit.DAYS.between(now, one.getCreateTime());
@@ -96,7 +101,7 @@ public class BorrowServiceImpl extends BaseServiceImpl<Borrow> implements Borrow
         if (save) {
             one.setStatus(BookStatus.RETURNED.getCode());
             this.updateById(one);
-            book.setNum(book.getNum() + 1);
+            book.setNum(book.getNum() + borrow.getNum());
             bookMapper.updateById(book);
         }
         return book;
